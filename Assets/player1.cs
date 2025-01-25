@@ -13,6 +13,7 @@ public class player1 : MonoBehaviour
     float playerHalfHeight;
     Vector3 screenBoundsLeft;
     Vector3 screenBoundsRight;
+    Vector3 screenBoundsMiddle;
     // Start is called before the first frame update
     void Start()
     { 
@@ -20,6 +21,7 @@ public class player1 : MonoBehaviour
         playerHalfHeight = GetComponent<SpriteRenderer>().bounds.extents.y;
         
         GameObject.Find("gameover").GetComponent<Renderer>().enabled = false;
+        GameObject.Find("youwin").GetComponent<Renderer>().enabled = false;
         GameObject.Find("restart").GetComponent<Renderer>().enabled = false;
         GameObject.Find("restart").GetComponent<Collider2D>().enabled = false;
     }
@@ -29,9 +31,21 @@ public class player1 : MonoBehaviour
     {
         screenBoundsLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 1));
         screenBoundsRight = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 1));
+        screenBoundsMiddle = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 1));
+
+        float halfCameraHeight = screenBoundsMiddle.y - screenBoundsLeft.y;
 
         float timeDeltaTime = Time.deltaTime;
-        Camera.main.transform.position = Camera.main.transform.position + new Vector3(0, -scrollFactor * Time.deltaTime, 0);
+        Camera.main.transform.position = new Vector3(
+            Camera.main.transform.position.x,
+            Mathf.Clamp(   
+                Camera.main.transform.position.y - scrollFactor * Time.deltaTime,
+                GameObject.Find("background-texture").GetComponent<SpriteRenderer>().bounds.min.y + halfCameraHeight,
+                screenBoundsRight.y
+            ),
+            Camera.main.transform.position.z
+        );
+        
         float positionX = transform.position.x;
         float positionY = transform.position.y - scrollFactor * timeDeltaTime;
 
@@ -45,9 +59,12 @@ public class player1 : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D collision) {
-        Debug.Log(collision.name);
-        playerHealth--;
-        GameObject.Find("gameover").GetComponent<Renderer>().enabled = true;
+        if(collision.name.StartsWith("enemy")) {
+            playerHealth--;
+            GameObject.Find("gameover").GetComponent<Renderer>().enabled = true;
+        } else if (collision.name.StartsWith("pineapplehouse")) {
+            GameObject.Find("youwin").GetComponent<Renderer>().enabled = true;
+        }
         GameObject.Find("restart").GetComponent<Renderer>().enabled = true;
         GameObject.Find("restart").GetComponent<Collider2D>().enabled = true;
         Time.timeScale = 0;
