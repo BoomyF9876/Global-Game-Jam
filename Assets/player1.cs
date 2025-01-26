@@ -62,8 +62,10 @@ public class player1 : MonoBehaviour
         if(collision.name.StartsWith("enemy")) {
             playerHealth--;
             GameObject.Find("gameover").GetComponent<Renderer>().enabled = true;
+            GameObject.Find("GameOverMusic").GetComponent<AudioSource>().Play();
         } else if (collision.name.StartsWith("pineapplehouse")) {
             GameObject.Find("youwin").GetComponent<Renderer>().enabled = true;
+            GameObject.Find("WinMusic").GetComponent<AudioSource>().Play();
         }
         GameObject.Find("restart").GetComponent<Renderer>().enabled = true;
         GameObject.Find("restart").GetComponent<Collider2D>().enabled = true;
