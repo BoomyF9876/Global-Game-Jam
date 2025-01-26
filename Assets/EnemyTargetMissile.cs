@@ -7,6 +7,7 @@ public class EnemyTargetMissile : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.Find("player1");
     }
 
     public float distanceToPlayer = 2.0f;
@@ -15,7 +16,7 @@ public class EnemyTargetMissile : MonoBehaviour
     bool isTriggered = false;
     float angle;
 
-    public GameObject player;
+     GameObject player;
 
     // Update is called once per frame
     void Update()
@@ -24,6 +25,8 @@ public class EnemyTargetMissile : MonoBehaviour
 
 
             if (Vector3.Distance(transform.position, player.transform.position) < distanceToPlayer) {
+                 GetComponent<AudioSource>().Play();
+
                 isTriggered = true;
                 Vector3 posDiff = player.transform.position - transform.position;
                 angle = Mathf.Atan2(posDiff.y, posDiff.x) / Mathf.PI * 180;

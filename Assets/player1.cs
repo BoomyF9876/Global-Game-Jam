@@ -67,6 +67,8 @@ public class player1 : MonoBehaviour
         }
         GameObject.Find("restart").GetComponent<Renderer>().enabled = true;
         GameObject.Find("restart").GetComponent<Collider2D>().enabled = true;
+
+        GameObject.Find("BackgroundMusic").GetComponent<AudioSource>().Stop();
         Time.timeScale = 0;
     }
 }
