@@ -5,6 +5,7 @@ using UnityEngine;
 public class enemy1 : MonoBehaviour
 {
     public float enemySpeedFactor = 1.0f;
+    public float playerDistance = 6.0f;
     public int enemyDirection = 1;
     // Start is called before the first frame update
     void Start()
@@ -16,10 +17,13 @@ public class enemy1 : MonoBehaviour
     void Update()
     {
         float positionX = transform.position.x;
+        float positionY = transform.position.y;
         float timeDeltaTime = Time.deltaTime;
+        float playerPosition = GameObject.Find("player1").transform.position.y;
 
-        positionX += enemySpeedFactor * timeDeltaTime * enemyDirection;
-
+        if (playerPosition < positionY + playerDistance) {
+            positionX += enemySpeedFactor * timeDeltaTime * enemyDirection;
+        }
         transform.position = new Vector3(positionX, transform.position.y, 0);
     }
 }
